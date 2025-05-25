@@ -103,6 +103,8 @@
     </div>
     <div class="hint-text" id="hint"></div>
     <div class="result" id="result"></div>
+<button id="restartBtn" style="display: none; margin-top: 20px;">Zagraj ponownie</button>
+
   </div>
 
   <script>
@@ -312,6 +314,11 @@
         answersEl.innerHTML = "";
         hintEl.textContent = "";
         resultEl.textContent = `Twój wynik: ${current}/${questions.length}`;
+        questionEl.textContent = "Błędna odpowiedź! Gra zakończona.";
+answersEl.innerHTML = "";
+resultEl.textContent = `Twój wynik: ${current}/${questions.length}`;
+restartBtn.style.display = "block";
+
         disableLifelines();
       }
     }
@@ -427,6 +434,30 @@
     document.getElementById("audienceBtn").addEventListener("click", useAudience);
 
     showQuestion();
+    if (current >= questions.length) {
+  questionEl.textContent = "Gratulacje! Odpowiedziałeś na wszystkie pytania!";
+  answersEl.innerHTML = "";
+  resultEl.textContent = `Twój wynik: ${questions.length}/${questions.length}`;
+  restartBtn.style.display = "block";
+  return;
+}
+
+   
+  showQuestion();
+    
+   
+const restartBtn = document.getElementById("restartBtn");
+
+restartBtn.onclick = () => {
+  current = 0;
+  resultEl.textContent = "";
+  restartBtn.style.display = "none";
+  showQuestion();
+};
+
+
+
+
   </script>
 </body>
 </html>
