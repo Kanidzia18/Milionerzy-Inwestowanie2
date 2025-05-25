@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -18,6 +19,7 @@
       padding: 20px;
       margin: 0;
     }
+
     .game-container {
       background-color: #003366;
       border: 5px solid gold;
@@ -27,10 +29,12 @@
       max-width: 700px;
       text-align: center;
     }
+
     .question {
       font-size: 1.3em;
       margin-bottom: 20px;
     }
+
     .answers button {
       background-color: #004080;
       border: 2px solid #ffffff;
@@ -42,12 +46,15 @@
       cursor: pointer;
       width: 100%;
     }
+
     .answers button:hover {
       background-color: #0059b3;
     }
+
     .lifelines {
       margin: 15px 0;
     }
+
     .lifelines button {
       background-color: #ffcc00;
       border: none;
@@ -59,14 +66,17 @@
       margin: 5px;
       cursor: pointer;
     }
+
     .lifelines button:disabled {
       background-color: #999;
       cursor: not-allowed;
     }
+
     .result {
       font-size: 1.5em;
       margin-top: 20px;
     }
+
     #restartBtn {
       background-color: #00aaff;
       border: none;
@@ -78,33 +88,44 @@
       display: none;
       margin-top: 20px;
     }
+
     #restartBtn:hover {
       background-color: #007acc;
     }
+
     .qr-code {
-      margin-top: 20px;
+      margin-top: 30px;
     }
+
     .qr-code img {
-      width: 150px;
+      width: 200px;
+      height: auto;
+      border: 2px solid white;
+      border-radius: 10px;
     }
   </style>
 </head>
 <body>
   <div class="game-container">
     <h1>Milionerzy: Inwestowanie</h1>
+
     <div class="lifelines">
       <button id="fiftyBtn">50:50</button>
       <button id="phoneBtn">Telefon</button>
       <button id="audienceBtn">Publiczność</button>
     </div>
+
     <div id="game">
       <div class="question" id="question">Ładowanie pytania...</div>
       <div class="answers" id="answers"></div>
     </div>
+
     <div class="result" id="result"></div>
     <button id="restartBtn">Zagraj ponownie</button>
+
     <div class="qr-code">
-      <img src="images/ph.png" alt="Kod QR do gry" />
+      <p>Zeskanuj kod QR:</p>
+      <img src="images/qr.png" alt="Kod QR">
     </div>
   </div>
 
@@ -205,12 +226,9 @@
     };
 
     showQuestion();
-    <img src="images/ph.png" alt="QR Code" style="width: 200px; margin-top: 20px;" />
-
   </script>
 </body>
 </html>
-
 
 
 
