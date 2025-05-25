@@ -107,57 +107,159 @@
 
   <script>
     const questions = [
-      {
-        question: "Co oznacza skrót 'GPW'?",
-        answers: [
-          "Giełda Papierów Wartościowych",
-          "Główna Przychodnia Wiejska",
-          "Globalna Przychodnia Wschodnia",
-          "Główne Przedsiębiorstwo Wschodnie"
-        ],
-        correct: 0
-      },
-      {
-        question: "Co to jest dywersyfikacja portfela inwestycyjnego?",
-        answers: [
-          "Inwestowanie tylko w jedną branżę",
-          "Kupowanie jednej akcji wielokrotnie",
-          "Podział inwestycji na różne aktywa",
-          "Wybieranie najtańszych akcji"
-        ],
-        correct: 2
-      },
-      {
-        question: "Który z tych instrumentów jest najbardziej ryzykowny?",
-        answers: [
-          "Lokata bankowa",
-          "Obligacje skarbowe",
-          "Akcje startupu",
-          "Konto oszczędnościowe"
-        ],
-        correct: 2
-      },
-      {
-        question: "Czym jest dywidenda?",
-        answers: [
-          "Podatek od inwestycji",
-          "Część zysku wypłacana akcjonariuszom",
-          "Koszt zakupu akcji",
-          "Opłata giełdowa"
-        ],
-        correct: 1
-      },
-      {
-        question: "Jaką główną funkcję pełni giełda?",
-        answers: [
-          "Umożliwia handel papierami wartościowymi",
-          "Wypłaca emerytury",
-          "Kontroluje banki",
-          "Przechowuje dokumenty firm"
-        ],
-        correct: 0
-      }
-    ];
+  {
+    question: "Co oznacza skrót 'GPW'?",
+    answers: [
+      "Giełda Papierów Wartościowych",
+      "Główna Przychodnia Wiejska",
+      "Globalna Przychodnia Wschodnia",
+      "Główne Przedsiębiorstwo Wschodnie"
+    ],
+    correct: 0
+  },
+  {
+    question: "Co to jest dywersyfikacja portfela inwestycyjnego?",
+    answers: [
+      "Inwestowanie tylko w jedną branżę",
+      "Kupowanie jednej akcji wielokrotnie",
+      "Podział inwestycji na różne aktywa",
+      "Wybieranie najtańszych akcji"
+    ],
+    correct: 2
+  },
+  {
+    question: "Który z tych instrumentów jest najbardziej ryzykowny?",
+    answers: [
+      "Lokata bankowa",
+      "Obligacje skarbowe",
+      "Akcje startupu",
+      "Konto oszczędnościowe"
+    ],
+    correct: 2
+  },
+  {
+    question: "Czym jest dywidenda?",
+    answers: [
+      "Podatek od inwestycji",
+      "Część zysku wypłacana akcjonariuszom",
+      "Koszt zakupu akcji",
+      "Opłata giełdowa"
+    ],
+    correct: 1
+  },
+  {
+    question: "Jaką główną funkcję pełni giełda?",
+    answers: [
+      "Umożliwia handel papierami wartościowymi",
+      "Wypłaca emerytury",
+      "Kontroluje banki",
+      "Przechowuje dokumenty firm"
+    ],
+    correct: 0
+  },
+  {
+    question: "Co to jest obligacja?",
+    answers: [
+      "Część udziałów w firmie",
+      "Pożyczka udzielana emitentowi przez inwestora",
+      "Rodzaj akcji",
+      "Koszt transakcji giełdowej"
+    ],
+    correct: 1
+  },
+  {
+    question: "Co oznacza termin 'likwidność' inwestycji?",
+    answers: [
+      "Łatwość zamiany inwestycji na gotówkę",
+      "Wysokość zysku z inwestycji",
+      "Ryzyko utraty wartości inwestycji",
+      "Czas trwania inwestycji"
+    ],
+    correct: 0
+  },
+  {
+    question: "Co to jest indeks giełdowy?",
+    answers: [
+      "Lista wszystkich firm na giełdzie",
+      "Średnia cena wybranych akcji",
+      "Podatek od zysków kapitałowych",
+      "Rodzaj obligacji"
+    ],
+    correct: 1
+  },
+  {
+    question: "Co oznacza 'stopa zwrotu' z inwestycji?",
+    answers: [
+      "Całkowita kwota zainwestowana",
+      "Procentowy zysk lub strata z inwestycji",
+      "Czas trwania inwestycji",
+      "Kwota podatku od inwestycji"
+    ],
+    correct: 1
+  },
+  {
+    question: "Co to jest fundusz inwestycyjny?",
+    answers: [
+      "Osoba inwestująca na giełdzie",
+      "Zbiorcza inwestycja wielu osób zarządzana przez profesjonalistów",
+      "Rodzaj obligacji",
+      "Specjalne konto bankowe"
+    ],
+    correct: 1
+  },
+  {
+    question: "Co to jest hossa na rynku?",
+    answers: [
+      "Spadek cen akcji",
+      "Stabilizacja cen akcji",
+      "Wzrost cen akcji",
+      "Zamknięcie giełdy"
+    ],
+    correct: 2
+  },
+  {
+    question: "Co oznacza termin 'stop loss'?",
+    answers: [
+      "Automatyczna sprzedaż akcji po określonej stracie",
+      "Maksymalny zysk z inwestycji",
+      "Koszt transakcji giełdowej",
+      "Minimalna cena akcji"
+    ],
+    correct: 0
+  },
+  {
+    question: "Co to jest analiza fundamentalna?",
+    answers: [
+      "Analiza wykresów i trendów cenowych",
+      "Analiza sytuacji finansowej i perspektyw firmy",
+      "Ocena nastrojów inwestorów",
+      "Badanie rynku nieruchomości"
+    ],
+    correct: 1
+  },
+  {
+    question: "Co oznacza 'dywersyfikacja'?",
+    answers: [
+      "Inwestowanie w różne aktywa aby zmniejszyć ryzyko",
+      "Inwestowanie tylko w akcje technologiczne",
+      "Trzymanie gotówki na koncie",
+      "Wszystkie inwestycje w jednej firmie"
+    ],
+    correct: 0
+  },
+  {
+    question: "Jakie jest główne ryzyko inwestowania w akcje?",
+    answers: [
+      "Utrata wartości inwestycji",
+      "Gwarantowany zysk",
+      "Brak możliwości sprzedaży",
+      "Stałe oprocentowanie"
+    ],
+    correct: 0
+  }
+];
+
+   
 
     let current = 0;
     const questionEl = document.getElementById("question");
