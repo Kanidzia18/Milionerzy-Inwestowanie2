@@ -38,271 +38,147 @@
       color: white;
       font-size: 1em;
       padding: 10px;
-      margin: 5px 0;
+      margin: 5px;
       cursor: pointer;
       width: 100%;
-      text-align: left;
-      position: relative;
     }
-    .answers button:hover:not([disabled]) {
+    .answers button:hover {
       background-color: #0059b3;
-    }
-    .answers button[disabled] {
-      background-color: #00264d;
-      cursor: default;
-      color: #777;
     }
     .result {
       font-size: 1.5em;
       margin-top: 20px;
     }
-    .lifelines {
-      margin: 15px 0;
-      display: flex;
-      justify-content: space-around;
-      gap: 10px;
-    }
-    .lifelines button {
-      background-color: gold;
+    #restartBtn {
+      background-color: #00aaff;
       border: none;
       border-radius: 10px;
-      color: #003366;
-      font-weight: bold;
-      padding: 8px 12px;
-      cursor: pointer;
-      flex: 1;
-      max-width: 180px;
-    }
-    .lifelines button:disabled {
-      background-color: #999966;
-      cursor: default;
-      color: #444;
-    }
-    .hint-text {
+      color: white;
       font-size: 1em;
-      margin-top: 10px;
-      font-style: italic;
-      color: #ffff88;
-      min-height: 24px;
+      padding: 10px 20px;
+      cursor: pointer;
+      display: none;
+      margin-top: 20px;
+    }
+    #restartBtn:hover {
+      background-color: #007acc;
     }
   </style>
 </head>
 <body>
   <div class="game-container">
     <h1>Milionerzy: Inwestowanie</h1>
-
-    <div class="lifelines">
-      <button id="fiftyBtn" title="50:50 - usuwa dwie błędne odpowiedzi">50:50</button>
-      <button id="phoneBtn" title="Telefon do przyjaciela - podpowiedź">Telefon do przyjaciela</button>
-      <button id="audienceBtn" title="Pytanie do publiczności - procentowe podpowiedzi">Publiczność</button>
-    </div>
-
     <div id="game">
       <div class="question" id="question">Ładowanie pytania...</div>
       <div class="answers" id="answers"></div>
     </div>
-    <div class="hint-text" id="hint"></div>
     <div class="result" id="result"></div>
-<button id="restartBtn" style="display: none; margin-top: 20px;">Zagraj ponownie</button>
-
+    <button id="restartBtn">Zagraj ponownie</button>
   </div>
 
   <script>
     const questions = [
-  {
-    question: "Co oznacza skrót 'GPW'?",
-    answers: [
-      "Giełda Papierów Wartościowych",
-      "Główna Przychodnia Wiejska",
-      "Globalna Przychodnia Wschodnia",
-      "Główne Przedsiębiorstwo Wschodnie"
-    ],
-    correct: 0
-  },
-  {
-    question: "Co to jest dywersyfikacja portfela inwestycyjnego?",
-    answers: [
-      "Inwestowanie tylko w jedną branżę",
-      "Kupowanie jednej akcji wielokrotnie",
-      "Podział inwestycji na różne aktywa",
-      "Wybieranie najtańszych akcji"
-    ],
-    correct: 2
-  },
-  {
-    question: "Który z tych instrumentów jest najbardziej ryzykowny?",
-    answers: [
-      "Lokata bankowa",
-      "Obligacje skarbowe",
-      "Akcje startupu",
-      "Konto oszczędnościowe"
-    ],
-    correct: 2
-  },
-  {
-    question: "Czym jest dywidenda?",
-    answers: [
-      "Podatek od inwestycji",
-      "Część zysku wypłacana akcjonariuszom",
-      "Koszt zakupu akcji",
-      "Opłata giełdowa"
-    ],
-    correct: 1
-  },
-  {
-    question: "Jaką główną funkcję pełni giełda?",
-    answers: [
-      "Umożliwia handel papierami wartościowymi",
-      "Wypłaca emerytury",
-      "Kontroluje banki",
-      "Przechowuje dokumenty firm"
-    ],
-    correct: 0
-  },
-  {
-    question: "Co to jest obligacja?",
-    answers: [
-      "Część udziałów w firmie",
-      "Pożyczka udzielana emitentowi przez inwestora",
-      "Rodzaj akcji",
-      "Koszt transakcji giełdowej"
-    ],
-    correct: 1
-  },
-  {
-    question: "Co oznacza termin 'likwidność' inwestycji?",
-    answers: [
-      "Łatwość zamiany inwestycji na gotówkę",
-      "Wysokość zysku z inwestycji",
-      "Ryzyko utraty wartości inwestycji",
-      "Czas trwania inwestycji"
-    ],
-    correct: 0
-  },
-  {
-    question: "Co to jest indeks giełdowy?",
-    answers: [
-      "Lista wszystkich firm na giełdzie",
-      "Średnia cena wybranych akcji",
-      "Podatek od zysków kapitałowych",
-      "Rodzaj obligacji"
-    ],
-    correct: 1
-  },
-  {
-    question: "Co oznacza 'stopa zwrotu' z inwestycji?",
-    answers: [
-      "Całkowita kwota zainwestowana",
-      "Procentowy zysk lub strata z inwestycji",
-      "Czas trwania inwestycji",
-      "Kwota podatku od inwestycji"
-    ],
-    correct: 1
-  },
-  {
-    question: "Co to jest fundusz inwestycyjny?",
-    answers: [
-      "Osoba inwestująca na giełdzie",
-      "Zbiorcza inwestycja wielu osób zarządzana przez profesjonalistów",
-      "Rodzaj obligacji",
-      "Specjalne konto bankowe"
-    ],
-    correct: 1
-  },
-  {
-    question: "Co to jest hossa na rynku?",
-    answers: [
-      "Spadek cen akcji",
-      "Stabilizacja cen akcji",
-      "Wzrost cen akcji",
-      "Zamknięcie giełdy"
-    ],
-    correct: 2
-  },
-  {
-    question: "Co oznacza termin 'stop loss'?",
-    answers: [
-      "Automatyczna sprzedaż akcji po określonej stracie",
-      "Maksymalny zysk z inwestycji",
-      "Koszt transakcji giełdowej",
-      "Minimalna cena akcji"
-    ],
-    correct: 0
-  },
-  {
-    question: "Co to jest analiza fundamentalna?",
-    answers: [
-      "Analiza wykresów i trendów cenowych",
-      "Analiza sytuacji finansowej i perspektyw firmy",
-      "Ocena nastrojów inwestorów",
-      "Badanie rynku nieruchomości"
-    ],
-    correct: 1
-  },
-  {
-    question: "Co oznacza 'dywersyfikacja'?",
-    answers: [
-      "Inwestowanie w różne aktywa aby zmniejszyć ryzyko",
-      "Inwestowanie tylko w akcje technologiczne",
-      "Trzymanie gotówki na koncie",
-      "Wszystkie inwestycje w jednej firmie"
-    ],
-    correct: 0
-  },
-  {
-    question: "Jakie jest główne ryzyko inwestowania w akcje?",
-    answers: [
-      "Utrata wartości inwestycji",
-      "Gwarantowany zysk",
-      "Brak możliwości sprzedaży",
-      "Stałe oprocentowanie"
-    ],
-    correct: 0
-  }
-];
-
-   
+      {
+        question: "Co oznacza skrót 'GPW'?",
+        answers: ["Giełda Papierów Wartościowych", "Główna Przychodnia Wiejska", "Globalna Przychodnia Wschodnia", "Główne Przedsiębiorstwo Wschodnie"],
+        correct: 0
+      },
+      {
+        question: "Co to jest dywersyfikacja portfela inwestycyjnego?",
+        answers: ["Inwestowanie tylko w jedną branżę", "Kupowanie jednej akcji wielokrotnie", "Podział inwestycji na różne aktywa", "Wybieranie najtańszych akcji"],
+        correct: 2
+      },
+      {
+        question: "Który z tych instrumentów jest najbardziej ryzykowny?",
+        answers: ["Lokata bankowa", "Obligacje skarbowe", "Akcje startupu", "Konto oszczędnościowe"],
+        correct: 2
+      },
+      {
+        question: "Czym jest dywidenda?",
+        answers: ["Podatek od inwestycji", "Część zysku wypłacana akcjonariuszom", "Koszt zakupu akcji", "Opłata giełdowa"],
+        correct: 1
+      },
+      {
+        question: "Jaką główną funkcję pełni giełda?",
+        answers: ["Umożliwia handel papierami wartościowymi", "Wypłaca emerytury", "Kontroluje banki", "Przechowuje dokumenty firm"],
+        correct: 0
+      },
+      {
+        question: "Czym jest inflacja?",
+        answers: ["Wzrost wartości pieniądza", "Spadek cen", "Wzrost cen i spadek siły nabywczej pieniądza", "Zwiększenie eksportu"],
+        correct: 2
+      },
+      {
+        question: "Co to jest stopa procentowa?",
+        answers: ["Wysokość podatku", "Procent zysku z giełdy", "Cena kredytu lub zysku z lokaty", "Wartość akcji"],
+        correct: 2
+      },
+      {
+        question: "Jakie ryzyko niesie inwestowanie w kryptowaluty?",
+        answers: ["Bardzo niskie", "Zawsze gwarantowany zysk", "Duża zmienność i brak regulacji", "Stały zwrot"],
+        correct: 2
+      },
+      {
+        question: "ETF to:",
+        answers: ["Rodzaj obligacji", "Fundusz inwestycyjny notowany na giełdzie", "Akcja spółki technologicznej", "Konto oszczędnościowe"],
+        correct: 1
+      },
+      {
+        question: "Która z tych instytucji reguluje rynek finansowy w Polsce?",
+        answers: ["ZUS", "NBP", "KNF", "PKO BP"],
+        correct: 2
+      },
+      {
+        question: "Co to jest lokata bankowa?",
+        answers: ["Inwestycja w złoto", "Pożyczka dla banku z gwarantowanym zyskiem", "Zakup akcji", "Fundusz emerytalny"],
+        correct: 1
+      },
+      {
+        question: "Który z poniższych to przykład aktywa trwałego?",
+        answers: ["Gotówka", "Ziemia", "Akcje", "Złoto"],
+        correct: 1
+      },
+      {
+        question: "Co to jest analiza fundamentalna?",
+        answers: ["Badanie wykresów cenowych", "Ocena kondycji finansowej firmy", "Przewidywanie kursów walut", "Ocena polityki rządu"],
+        correct: 1
+      },
+      {
+        question: "Jakie znaczenie ma czas w inwestowaniu?",
+        answers: ["Nie ma znaczenia", "Tylko dla dużych inwestorów", "Długoterminowe inwestycje często dają większy zysk", "Czas skraca inwestycję"],
+        correct: 2
+      },
+      {
+        question: "Czym różni się akcja od obligacji?",
+        answers: ["Obligacje to współwłasność, akcje to pożyczka", "Akcje dają udział w zyskach, obligacje to dług", "Nie ma różnicy", "Obligacje są bardziej ryzykowne"],
+        correct: 1
+      }
+    ];
 
     let current = 0;
     const questionEl = document.getElementById("question");
     const answersEl = document.getElementById("answers");
     const resultEl = document.getElementById("result");
-    const hintEl = document.getElementById("hint");
-
-    // Koła ratunkowe - stan użycia
-    let fiftyUsed = false;
-    let phoneUsed = false;
-    let audienceUsed = false;
-
-    // Przechowuje indeksy przycisków odpowiedzi aktualnego pytania
-    let answerButtons = [];
+    const restartBtn = document.getElementById("restartBtn");
 
     function showQuestion() {
       if (current >= questions.length) {
         questionEl.textContent = "Gratulacje! Odpowiedziałeś na wszystkie pytania!";
         answersEl.innerHTML = "";
-        hintEl.textContent = "";
         resultEl.textContent = `Twój wynik: ${questions.length}/${questions.length}`;
-        disableLifelines();
+        restartBtn.style.display = "block";
         return;
       }
 
       const q = questions[current];
       questionEl.textContent = q.question;
       answersEl.innerHTML = "";
-      hintEl.textContent = "";
-      answerButtons = [];
-
       q.answers.forEach((answer, i) => {
         const btn = document.createElement("button");
         btn.textContent = answer;
         btn.onclick = () => checkAnswer(i);
-        btn.disabled = false;
         answersEl.appendChild(btn);
-        answerButtons.push(btn);
       });
-
-      enableLifelines();
     }
 
     function checkAnswer(selected) {
@@ -312,152 +188,20 @@
       } else {
         questionEl.textContent = "Błędna odpowiedź! Gra zakończona.";
         answersEl.innerHTML = "";
-        hintEl.textContent = "";
         resultEl.textContent = `Twój wynik: ${current}/${questions.length}`;
-        questionEl.textContent = "Błędna odpowiedź! Gra zakończona.";
-answersEl.innerHTML = "";
-resultEl.textContent = `Twój wynik: ${current}/${questions.length}`;
-restartBtn.style.display = "block";
-
-        disableLifelines();
+        restartBtn.style.display = "block";
       }
     }
 
-    // 50:50 - usuwa dwie złe odpowiedzi
-    function useFifty() {
-      if (fiftyUsed) return;
-      fiftyUsed = true;
-      document.getElementById("fiftyBtn").disabled = true;
-
-      const correctIndex = questions[current].correct;
-
-      // Wybierz indeksy złych odpowiedzi
-      let wrongIndices = [];
-      for(let i=0; i < questions[current].answers.length; i++) {
-        if(i !== correctIndex) wrongIndices.push(i);
-      }
-      // Wylosuj 2 do usunięcia
-      wrongIndices = shuffleArray(wrongIndices).slice(0, 2);
-
-      wrongIndices.forEach(i => {
-        answerButtons[i].disabled = true;
-      });
-
-      hintEl.textContent = "Usunięto dwie błędne odpowiedzi.";
-    }
-
-    // Telefon do przyjaciela - podpowiada prawdopodobną odpowiedź
-    function usePhone() {
-      if (phoneUsed) return;
-      phoneUsed = true;
-      document.getElementById("phoneBtn").disabled = true;
-
-      const correctIndex = questions[current].correct;
-      const answers = questions[current].answers;
-
-      // Podpowiedź jako tekst
-      const friendHints = [
-        `Myślę, że prawidłowa odpowiedź to "${answers[correctIndex]}".`,
-        `Jestem prawie pewien, że to "${answers[correctIndex]}".`,
-        `Według mnie to "${answers[correctIndex]}".`
-      ];
-      const hint = friendHints[Math.floor(Math.random() * friendHints.length)];
-      hintEl.textContent = "Telefon do przyjaciela: " + hint;
-    }
-
-    // Pytanie do publiczności - pokazuje procenty przy odpowiedziach
-    function useAudience() {
-      if (audienceUsed) return;
-      audienceUsed = true;
-      document.getElementById("audienceBtn").disabled = true;
-
-      const correctIndex = questions[current].correct;
-      const answersCount = questions[current].answers.length;
-
-      // Procenty - największy przy poprawnej odpowiedzi, reszta losowo
-      let percentages = new Array(answersCount).fill(0);
-      let remaining = 100;
-
-      // Daj poprawnej odpowiedzi losowo 50-70%
-      let correctPercent = 50 + Math.floor(Math.random() * 21);
-      percentages[correctIndex] = correctPercent;
-      remaining -= correctPercent;
-
-      // Rozdziel resztę procentów na inne odpowiedzi
-      let wrongIndices = [];
-      for(let i=0; i < answersCount; i++) {
-        if(i !== correctIndex) wrongIndices.push(i);
-      }
-
-      wrongIndices.forEach((idx, i) => {
-        if(i === wrongIndices.length - 1) {
-          percentages[idx] = remaining;
-        } else {
-          let p = Math.floor(Math.random() * (remaining + 1));
-          percentages[idx] = p;
-          remaining -= p;
-        }
-      });
-
-      // Pokaż procenty przy przyciskach
-      answerButtons.forEach((btn, i) => {
-        btn.textContent = questions[current].answers[i] + ` (${percentages[i]}%)`;
-      });
-
-      hintEl.textContent = "Publiczność podpowiada procenty przy odpowiedziach.";
-    }
-
-    function disableLifelines() {
-      document.getElementById("fiftyBtn").disabled = true;
-      document.getElementById("phoneBtn").disabled = true;
-      document.getElementById("audienceBtn").disabled = true;
-    }
-
-    function enableLifelines() {
-      if (!fiftyUsed) document.getElementById("fiftyBtn").disabled = false;
-      if (!phoneUsed) document.getElementById("phoneBtn").disabled = false;
-      if (!audienceUsed) document.getElementById("audienceBtn").disabled = false;
-    }
-
-    // Funkcja do tasowania tablicy
-    function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    }
-
-    // Przypisanie eventów do przycisków koła ratunkowego
-    document.getElementById("fiftyBtn").addEventListener("click", useFifty);
-    document.getElementById("phoneBtn").addEventListener("click", usePhone);
-    document.getElementById("audienceBtn").addEventListener("click", useAudience);
+    restartBtn.onclick = () => {
+      current = 0;
+      resultEl.textContent = "";
+      restartBtn.style.display = "none";
+      showQuestion();
+    };
 
     showQuestion();
-    if (current >= questions.length) {
-  questionEl.textContent = "Gratulacje! Odpowiedziałeś na wszystkie pytania!";
-  answersEl.innerHTML = "";
-  resultEl.textContent = `Twój wynik: ${questions.length}/${questions.length}`;
-  restartBtn.style.display = "block";
-  return;
-}
-
-   
-  showQuestion();
-    
-   
-const restartBtn = document.getElementById("restartBtn");
-
-restartBtn.onclick = () => {
-  current = 0;
-  resultEl.textContent = "";
-  restartBtn.style.display = "none";
-  showQuestion();
-};
-
-
-
-
   </script>
 </body>
 </html>
+
