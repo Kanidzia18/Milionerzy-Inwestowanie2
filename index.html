@@ -171,12 +171,14 @@
     };
 
     fiftyBtn.onclick = () => {
-      const buttons = Array.from(answersEl.querySelectorAll("button"));
-      const correctIndex = questions[current].correct;
-      let wrong = buttons.filter(b => parseInt(b.dataset.index) !== correctIndex);
-      wrong.sort(() => Math.random() - 0.5).slice(0, 2).forEach(b => b.disabled = true);
-      fiftyBtn.disabled = true;
-    };
+  const buttons = Array.from(answersEl.querySelectorAll("button"));
+  const correctIndex = questions[current].correct;
+  let wrongButtons = buttons.filter(btn => Number(btn.dataset.index) !== correctIndex);
+  wrongButtons.sort(() => Math.random() - 0.5).slice(0, 2).forEach(btn => {
+    btn.style.visibility = "hidden";
+  });
+  fiftyBtn.disabled = true;
+};
 
     phoneBtn.onclick = () => {
       const correctAnswer = questions[current].answers[questions[current].correct];
