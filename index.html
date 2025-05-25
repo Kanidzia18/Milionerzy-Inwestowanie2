@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Milionerzy: Inwestowanie</title>
+  <style>
+    body {
+      background-color: #001f3f;
+      color: #fff;
+      font-family: 'Trebuchet MS', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 20px;
+      margin: 0;
+    }
+    .game-container {
+      background-color: #003366;
+      border: 5px solid gold;
+      border-radius: 20px;
+      padding: 20px;
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+    }
+    .question {
+      font-size: 1.3em;
+      margin-bottom: 20px;
+    }
+    .answers button {
+      background-color: #004080;
+      border: 2px solid #ffffff;
+      border-radius: 10px;
+      color: white;
+      font-size: 1em;
+      padding: 10px;
+      margin: 5px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .answers button:hover {
+      background-color: #0059b3;
+    }
+    .result {
+      font-size: 1.5em;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h1>Milionerzy: Inwestowanie</h1>
+    <div id="game">
+      <div class="question" id="question">Ładowanie pytania...</div>
+      <div class="answers" id="answers"></div>
+    </div>
+    <div class="result" id="result"></div>
+  </div>
+  <script>
+    const questions = [
+      {
+        question: "Co oznacza skrót 'GPW'?",
+        answers: [
+          "Giełda Papierów Wartościowych",
+          "Główna Przychodnia Wiejska",
+          "Globalna Przychodnia Wschodnia",
+          "Główne Przedsiębiorstwo Wschodnie"
+        ],
+        correct: 0
+      },
+      {
+        question: "Co to jest dywersyfikacja portfela inwestycyjnego?",
+        answers: [
+          "Inwestowanie tylko w jedną branżę",
+          "Kupowanie jednej akcji wielokrotnie",
+          "Podział inwestycji na różne aktywa",
+          "Wybieranie najtańszych akcji"
+        ],
+        correct: 2
+      },
+      {
+        question: "Który z tych instrumentów jest najbardziej ryzykowny?",
+        answers: [
+          "Lokata bankowa",
+          "Obligacje skarbowe",
+          "Akcje startupu",
+          "Konto oszczędnościowe"
+        ],
+        correct: 2
+      },
+      {
+        question: "Czym jest dywidenda?",
+        answers: [
+          "Podatek od inwestycji",
+          "Część zysku wypłacana akcjonariuszom",
+          "Koszt zakupu akcji",
+          "Opłata giełdowa"
+        ],
+        correct: 1
+      },
+      {
+        question: "Jaką główną funkcję pełni giełda?",
+        answers: [
+          "Umożliwia handel papierami wartościowymi",
+          "Wypłaca emerytury",
+          "Kontroluje banki",
+          "Przechowuje dokumenty firm"
+        ],
+        correct: 0
+      }
+    ];
+
+    let current = 0;
+    const questionEl = document.getElementById("question");
+    const answersEl = document.getElementById("answers");
+    const resultEl = document.getElementById("result");
+
+    function showQuestion() {
+      if (current >= questions.length) {
+        questionEl.textContent = "Gratulacje! Odpowiedziałeś na wszystkie pytania!";
+        answersEl.innerHTML = "";
+        resultEl.textContent = `Twój wynik: ${questions.length}/${questions.length}`;
+        return;
+      }
+
+      const q = questions[current];
+      questionEl.textContent = q.question;
+      answersEl.innerHTML = "";
+      q.answers.forEach((answer, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = answer;
+        btn.onclick = () => checkAnswer(i);
+        answersEl.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected) {
+      if (selected === questions[current].correct) {
+        current++;
+        showQuestion();
+      } else {
+        questionEl.textContent = "Błędna odpowiedź! Gra zakończona.";
+        answersEl.innerHTML = "";
+        resultEl.textContent = `Twój wynik: ${current}/${questions.length}`;
+      }
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
