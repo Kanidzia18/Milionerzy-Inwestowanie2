@@ -24,7 +24,7 @@
       border-radius: 20px;
       padding: 20px;
       width: 90%;
-      max-width: 600px;
+      max-width: 700px;
       text-align: center;
     }
     .question {
@@ -44,6 +44,24 @@
     }
     .answers button:hover {
       background-color: #0059b3;
+    }
+    .lifelines {
+      margin: 15px 0;
+    }
+    .lifelines button {
+      background-color: #ffcc00;
+      border: none;
+      border-radius: 10px;
+      color: black;
+      font-weight: bold;
+      font-size: 0.9em;
+      padding: 8px 12px;
+      margin: 5px;
+      cursor: pointer;
+    }
+    .lifelines button:disabled {
+      background-color: #999;
+      cursor: not-allowed;
     }
     .result {
       font-size: 1.5em;
@@ -68,6 +86,11 @@
 <body>
   <div class="game-container">
     <h1>Milionerzy: Inwestowanie</h1>
+    <div class="lifelines">
+      <button id="fiftyBtn">50:50</button>
+      <button id="phoneBtn">Telefon</button>
+      <button id="audienceBtn">Publiczność</button>
+    </div>
     <div id="game">
       <div class="question" id="question">Ładowanie pytania...</div>
       <div class="answers" id="answers"></div>
@@ -78,81 +101,21 @@
 
   <script>
     const questions = [
-      {
-        question: "Co oznacza skrót 'GPW'?",
-        answers: ["Giełda Papierów Wartościowych", "Główna Przychodnia Wiejska", "Globalna Przychodnia Wschodnia", "Główne Przedsiębiorstwo Wschodnie"],
-        correct: 0
-      },
-      {
-        question: "Co to jest dywersyfikacja portfela inwestycyjnego?",
-        answers: ["Inwestowanie tylko w jedną branżę", "Kupowanie jednej akcji wielokrotnie", "Podział inwestycji na różne aktywa", "Wybieranie najtańszych akcji"],
-        correct: 2
-      },
-      {
-        question: "Który z tych instrumentów jest najbardziej ryzykowny?",
-        answers: ["Lokata bankowa", "Obligacje skarbowe", "Akcje startupu", "Konto oszczędnościowe"],
-        correct: 2
-      },
-      {
-        question: "Czym jest dywidenda?",
-        answers: ["Podatek od inwestycji", "Część zysku wypłacana akcjonariuszom", "Koszt zakupu akcji", "Opłata giełdowa"],
-        correct: 1
-      },
-      {
-        question: "Jaką główną funkcję pełni giełda?",
-        answers: ["Umożliwia handel papierami wartościowymi", "Wypłaca emerytury", "Kontroluje banki", "Przechowuje dokumenty firm"],
-        correct: 0
-      },
-      {
-        question: "Czym jest inflacja?",
-        answers: ["Wzrost wartości pieniądza", "Spadek cen", "Wzrost cen i spadek siły nabywczej pieniądza", "Zwiększenie eksportu"],
-        correct: 2
-      },
-      {
-        question: "Co to jest stopa procentowa?",
-        answers: ["Wysokość podatku", "Procent zysku z giełdy", "Cena kredytu lub zysku z lokaty", "Wartość akcji"],
-        correct: 2
-      },
-      {
-        question: "Jakie ryzyko niesie inwestowanie w kryptowaluty?",
-        answers: ["Bardzo niskie", "Zawsze gwarantowany zysk", "Duża zmienność i brak regulacji", "Stały zwrot"],
-        correct: 2
-      },
-      {
-        question: "ETF to:",
-        answers: ["Rodzaj obligacji", "Fundusz inwestycyjny notowany na giełdzie", "Akcja spółki technologicznej", "Konto oszczędnościowe"],
-        correct: 1
-      },
-      {
-        question: "Która z tych instytucji reguluje rynek finansowy w Polsce?",
-        answers: ["ZUS", "NBP", "KNF", "PKO BP"],
-        correct: 2
-      },
-      {
-        question: "Co to jest lokata bankowa?",
-        answers: ["Inwestycja w złoto", "Pożyczka dla banku z gwarantowanym zyskiem", "Zakup akcji", "Fundusz emerytalny"],
-        correct: 1
-      },
-      {
-        question: "Który z poniższych to przykład aktywa trwałego?",
-        answers: ["Gotówka", "Ziemia", "Akcje", "Złoto"],
-        correct: 1
-      },
-      {
-        question: "Co to jest analiza fundamentalna?",
-        answers: ["Badanie wykresów cenowych", "Ocena kondycji finansowej firmy", "Przewidywanie kursów walut", "Ocena polityki rządu"],
-        correct: 1
-      },
-      {
-        question: "Jakie znaczenie ma czas w inwestowaniu?",
-        answers: ["Nie ma znaczenia", "Tylko dla dużych inwestorów", "Długoterminowe inwestycje często dają większy zysk", "Czas skraca inwestycję"],
-        correct: 2
-      },
-      {
-        question: "Czym różni się akcja od obligacji?",
-        answers: ["Obligacje to współwłasność, akcje to pożyczka", "Akcje dają udział w zyskach, obligacje to dług", "Nie ma różnicy", "Obligacje są bardziej ryzykowne"],
-        correct: 1
-      }
+      { question: "Co oznacza skrót 'GPW'?", answers: ["Giełda Papierów Wartościowych", "Główna Przychodnia Wiejska", "Globalna Przychodnia Wschodnia", "Główne Przedsiębiorstwo Wschodnie"], correct: 0 },
+      { question: "Co to jest dywersyfikacja portfela inwestycyjnego?", answers: ["Inwestowanie tylko w jedną branżę", "Kupowanie jednej akcji wielokrotnie", "Podział inwestycji na różne aktywa", "Wybieranie najtańszych akcji"], correct: 2 },
+      { question: "Który z tych instrumentów jest najbardziej ryzykowny?", answers: ["Lokata bankowa", "Obligacje skarbowe", "Akcje startupu", "Konto oszczędnościowe"], correct: 2 },
+      { question: "Czym jest dywidenda?", answers: ["Podatek od inwestycji", "Część zysku wypłacana akcjonariuszom", "Koszt zakupu akcji", "Opłata giełdowa"], correct: 1 },
+      { question: "Jaką główną funkcję pełni giełda?", answers: ["Umożliwia handel papierami wartościowymi", "Wypłaca emerytury", "Kontroluje banki", "Przechowuje dokumenty firm"], correct: 0 },
+      { question: "Czym jest inflacja?", answers: ["Wzrost wartości pieniądza", "Spadek cen", "Wzrost cen i spadek siły nabywczej pieniądza", "Zwiększenie eksportu"], correct: 2 },
+      { question: "Co to jest stopa procentowa?", answers: ["Wysokość podatku", "Procent zysku z giełdy", "Cena kredytu lub zysku z lokaty", "Wartość akcji"], correct: 2 },
+      { question: "Jakie ryzyko niesie inwestowanie w kryptowaluty?", answers: ["Bardzo niskie", "Zawsze gwarantowany zysk", "Duża zmienność i brak regulacji", "Stały zwrot"], correct: 2 },
+      { question: "ETF to:", answers: ["Rodzaj obligacji", "Fundusz inwestycyjny notowany na giełdzie", "Akcja spółki technologicznej", "Konto oszczędnościowe"], correct: 1 },
+      { question: "Która z tych instytucji reguluje rynek finansowy w Polsce?", answers: ["ZUS", "NBP", "KNF", "PKO BP"], correct: 2 },
+      { question: "Co to jest lokata bankowa?", answers: ["Inwestycja w złoto", "Pożyczka dla banku z gwarantowanym zyskiem", "Zakup akcji", "Fundusz emerytalny"], correct: 1 },
+      { question: "Który z poniższych to przykład aktywa trwałego?", answers: ["Gotówka", "Ziemia", "Akcje", "Złoto"], correct: 1 },
+      { question: "Co to jest analiza fundamentalna?", answers: ["Badanie wykresów cenowych", "Ocena kondycji finansowej firmy", "Przewidywanie kursów walut", "Ocena polityki rządu"], correct: 1 },
+      { question: "Jakie znaczenie ma czas w inwestowaniu?", answers: ["Nie ma znaczenia", "Tylko dla dużych inwestorów", "Długoterminowe inwestycje często dają większy zysk", "Czas skraca inwestycję"], correct: 2 },
+      { question: "Czym różni się akcja od obligacji?", answers: ["Obligacje to współwłasność, akcje to pożyczka", "Akcje dają udział w zyskach, obligacje to dług", "Nie ma różnicy", "Obligacje są bardziej ryzykowne"], correct: 1 }
     ];
 
     let current = 0;
@@ -160,6 +123,9 @@
     const answersEl = document.getElementById("answers");
     const resultEl = document.getElementById("result");
     const restartBtn = document.getElementById("restartBtn");
+    const fiftyBtn = document.getElementById("fiftyBtn");
+    const phoneBtn = document.getElementById("phoneBtn");
+    const audienceBtn = document.getElementById("audienceBtn");
 
     function showQuestion() {
       if (current >= questions.length) {
@@ -176,6 +142,7 @@
       q.answers.forEach((answer, i) => {
         const btn = document.createElement("button");
         btn.textContent = answer;
+        btn.dataset.index = i;
         btn.onclick = () => checkAnswer(i);
         answersEl.appendChild(btn);
       });
@@ -197,11 +164,39 @@
       current = 0;
       resultEl.textContent = "";
       restartBtn.style.display = "none";
+      fiftyBtn.disabled = false;
+      phoneBtn.disabled = false;
+      audienceBtn.disabled = false;
       showQuestion();
+    };
+
+    fiftyBtn.onclick = () => {
+      const buttons = Array.from(answersEl.querySelectorAll("button"));
+      const correctIndex = questions[current].correct;
+      let wrong = buttons.filter(b => parseInt(b.dataset.index) !== correctIndex);
+      wrong.sort(() => Math.random() - 0.5).slice(0, 2).forEach(b => b.disabled = true);
+      fiftyBtn.disabled = true;
+    };
+
+    phoneBtn.onclick = () => {
+      const correctAnswer = questions[current].answers[questions[current].correct];
+      alert(`Telefon: Wydaje mi się, że poprawna odpowiedź to: "${correctAnswer}"`);
+      phoneBtn.disabled = true;
+    };
+
+    audienceBtn.onclick = () => {
+      const correct = questions[current].correct;
+      let distribution = [10, 20, 30, 40];
+      distribution[correct] += 30;
+      distribution = distribution.map(v => v + Math.floor(Math.random() * 10));
+      let result = questions[current].answers.map((a, i) => `${a}: ${distribution[i]}%`).join("\n");
+      alert("Publiczność głosowała:\n" + result);
+      audienceBtn.disabled = true;
     };
 
     showQuestion();
   </script>
 </body>
 </html>
+
 
