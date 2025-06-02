@@ -120,8 +120,23 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
   <script>
-    const questions = [...]; // Twoja lista pytań — pozostaje bez zmian
-
+    const questions = [
+  { question: "Co oznacza skrót 'GPW'?", answers: ["Giełda Papierów Wartościowych", "Główna Przychodnia Wiejska", "Globalna Przychodnia Wschodnia", "Główne Przedsiębiorstwo Wschodnie"], correct: 0 },
+  { question: "Co to jest dywersyfikacja portfela inwestycyjnego?", answers: ["Inwestowanie tylko w jedną branżę", "Kupowanie jednej akcji wielokrotnie", "Podział inwestycji na różne aktywa", "Wybieranie najtańszych akcji"], correct: 2 },
+  { question: "Który z tych instrumentów jest najbardziej ryzykowny?", answers: ["Lokata bankowa", "Obligacje skarbowe", "Akcje startupu", "Konto oszczędnościowe"], correct: 2 },
+  { question: "Czym jest dywidenda?", answers: ["Podatek od inwestycji", "Część zysku wypłacana akcjonariuszom", "Koszt zakupu akcji", "Opłata giełdowa"], correct: 1 },
+  { question: "Jaką główną funkcję pełni giełda?", answers: ["Umożliwia handel papierami wartościowymi", "Wypłaca emerytury", "Kontroluje banki", "Przechowuje dokumenty firm"], correct: 0 },
+  { question: "Czym jest inflacja?", answers: ["Wzrost wartości pieniądza", "Spadek cen", "Wzrost cen i spadek siły nabywczej pieniądza", "Zwiększenie eksportu"], correct: 2 },
+  { question: "Co to jest stopa procentowa?", answers: ["Wysokość podatku", "Procent zysku z giełdy", "Cena kredytu lub zysku z lokaty", "Wartość akcji"], correct: 2 },
+  { question: "Jakie ryzyko niesie inwestowanie w kryptowaluty?", answers: ["Bardzo niskie", "Zawsze gwarantowany zysk", "Duża zmienność i brak regulacji", "Stały zwrot"], correct: 2 },
+  { question: "ETF to:", answers: ["Rodzaj obligacji", "Fundusz inwestycyjny notowany na giełdzie", "Akcja spółki technologicznej", "Konto oszczędnościowe"], correct: 1 },
+  { question: "Która z tych instytucji reguluje rynek finansowy w Polsce?", answers: ["ZUS", "NBP", "KNF", "PKO BP"], correct: 2 },
+  { question: "Co to jest lokata bankowa?", answers: ["Inwestycja w złoto", "Pożyczka dla banku z gwarantowanym zyskiem", "Zakup akcji", "Fundusz emerytalny"], correct: 1 },
+  { question: "Który z poniższych to przykład aktywa trwałego?", answers: ["Gotówka", "Ziemia", "Akcje", "Złoto"], correct: 1 },
+  { question: "Co to jest analiza fundamentalna?", answers: ["Badanie wykresów cenowych", "Ocena kondycji finansowej firmy", "Przewidywanie kursów walut", "Ocena polityki rządu"], correct: 1 },
+  { question: "Jakie znaczenie ma czas w inwestowaniu?", answers: ["Nie ma znaczenia", "Tylko dla dużych inwestorów", "Długoterminowe inwestycje często dają większy zysk", "Czas skraca inwestycję"], correct: 2 },
+  { question: "Czym różni się akcja od obligacji?", answers: ["Obligacje to współwłasność, akcje to pożyczka", "Akcje dają udział w zyskach, obligacje to dług", "Nie ma różnicy", "Obligacje są bardziej ryzykowne"], correct: 1 }
+];
     let current = 0;
     const questionEl = document.getElementById("question");
     const answersEl = document.getElementById("answers");
