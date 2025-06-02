@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -18,7 +17,9 @@
       min-height: 100vh;
       padding: 20px;
       margin: 0;
+      overflow-x: hidden;
     }
+
     .game-container {
       background-color: #003366;
       border: 5px solid gold;
@@ -27,8 +28,15 @@
       width: 90%;
       max-width: 700px;
       text-align: center;
+      position: relative;
+      z-index: 1;
     }
-    .question { font-size: 1.3em; margin-bottom: 20px; }
+
+    .question {
+      font-size: 1.3em;
+      margin-bottom: 20px;
+    }
+
     .answers button {
       background-color: #004080;
       border: 2px solid #ffffff;
@@ -40,8 +48,15 @@
       cursor: pointer;
       width: 100%;
     }
-    .answers button:hover { background-color: #0059b3; }
-    .lifelines { margin: 15px 0; }
+
+    .answers button:hover {
+      background-color: #0059b3;
+    }
+
+    .lifelines {
+      margin: 15px 0;
+    }
+
     .lifelines button {
       background-color: #ffcc00;
       border: none;
@@ -53,11 +68,17 @@
       margin: 5px;
       cursor: pointer;
     }
+
     .lifelines button:disabled {
       background-color: #999;
       cursor: not-allowed;
     }
-    .result { font-size: 1.5em; margin-top: 20px; }
+
+    .result {
+      font-size: 1.5em;
+      margin-top: 20px;
+    }
+
     #restartBtn {
       background-color: #00aaff;
       border: none;
@@ -69,28 +90,46 @@
       display: none;
       margin-top: 20px;
     }
-    #restartBtn:hover { background-color: #007acc; }
-    .qr-code { margin-top: 30px; }
+
+    #restartBtn:hover {
+      background-color: #007acc;
+    }
+
+    .qr-code {
+      margin-top: 30px;
+    }
+
     .qr-code img {
       width: 200px;
       height: auto;
       border: 2px solid white;
       border-radius: 10px;
     }
-    #winMessage {
+
+    .money {
       position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #003300;
-      padding: 30px 50px;
-      border-radius: 20px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.7);
+      top: -50px;
       font-size: 2em;
-      z-index: 1000;
-      display: none;
+      animation: fall 3s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-50px) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    #winnerMessage {
+      font-size: 2em;
       color: gold;
-      border: 3px solid gold;
+      margin-top: 20px;
+      display: none;
     }
   </style>
 </head>
@@ -107,6 +146,7 @@
       <div class="answers" id="answers"></div>
     </div>
     <div class="result" id="result"></div>
+    <div id="winnerMessage">Brawo! Zostałeś milionerem!</div>
     <button id="restartBtn">Zagraj ponownie</button>
     <div class="qr-code">
       <p>Zeskanuj kod QR:</p>
@@ -114,29 +154,25 @@
     </div>
   </div>
 
-  <div id="winMessage">Brawo, zostałeś milionerem!</div>
-
-  <!-- Konfetti -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-
   <script>
     const questions = [
-  { question: "Co oznacza skrót 'GPW'?", answers: ["Giełda Papierów Wartościowych", "Główna Przychodnia Wiejska", "Globalna Przychodnia Wschodnia", "Główne Przedsiębiorstwo Wschodnie"], correct: 0 },
-  { question: "Co to jest dywersyfikacja portfela inwestycyjnego?", answers: ["Inwestowanie tylko w jedną branżę", "Kupowanie jednej akcji wielokrotnie", "Podział inwestycji na różne aktywa", "Wybieranie najtańszych akcji"], correct: 2 },
-  { question: "Który z tych instrumentów jest najbardziej ryzykowny?", answers: ["Lokata bankowa", "Obligacje skarbowe", "Akcje startupu", "Konto oszczędnościowe"], correct: 2 },
-  { question: "Czym jest dywidenda?", answers: ["Podatek od inwestycji", "Część zysku wypłacana akcjonariuszom", "Koszt zakupu akcji", "Opłata giełdowa"], correct: 1 },
-  { question: "Jaką główną funkcję pełni giełda?", answers: ["Umożliwia handel papierami wartościowymi", "Wypłaca emerytury", "Kontroluje banki", "Przechowuje dokumenty firm"], correct: 0 },
-  { question: "Czym jest inflacja?", answers: ["Wzrost wartości pieniądza", "Spadek cen", "Wzrost cen i spadek siły nabywczej pieniądza", "Zwiększenie eksportu"], correct: 2 },
-  { question: "Co to jest stopa procentowa?", answers: ["Wysokość podatku", "Procent zysku z giełdy", "Cena kredytu lub zysku z lokaty", "Wartość akcji"], correct: 2 },
-  { question: "Jakie ryzyko niesie inwestowanie w kryptowaluty?", answers: ["Bardzo niskie", "Zawsze gwarantowany zysk", "Duża zmienność i brak regulacji", "Stały zwrot"], correct: 2 },
-  { question: "ETF to:", answers: ["Rodzaj obligacji", "Fundusz inwestycyjny notowany na giełdzie", "Akcja spółki technologicznej", "Konto oszczędnościowe"], correct: 1 },
-  { question: "Która z tych instytucji reguluje rynek finansowy w Polsce?", answers: ["ZUS", "NBP", "KNF", "PKO BP"], correct: 2 },
-  { question: "Co to jest lokata bankowa?", answers: ["Inwestycja w złoto", "Pożyczka dla banku z gwarantowanym zyskiem", "Zakup akcji", "Fundusz emerytalny"], correct: 1 },
-  { question: "Który z poniższych to przykład aktywa trwałego?", answers: ["Gotówka", "Ziemia", "Akcje", "Złoto"], correct: 1 },
-  { question: "Co to jest analiza fundamentalna?", answers: ["Badanie wykresów cenowych", "Ocena kondycji finansowej firmy", "Przewidywanie kursów walut", "Ocena polityki rządu"], correct: 1 },
-  { question: "Jakie znaczenie ma czas w inwestowaniu?", answers: ["Nie ma znaczenia", "Tylko dla dużych inwestorów", "Długoterminowe inwestycje często dają większy zysk", "Czas skraca inwestycję"], correct: 2 },
-  { question: "Czym różni się akcja od obligacji?", answers: ["Obligacje to współwłasność, akcje to pożyczka", "Akcje dają udział w zyskach, obligacje to dług", "Nie ma różnicy", "Obligacje są bardziej ryzykowne"], correct: 1 }
-];
+      { question: "Co oznacza skrót 'GPW'?", answers: ["Giełda Papierów Wartościowych", "Główna Przychodnia Wiejska", "Globalna Przychodnia Wschodnia", "Główne Przedsiębiorstwo Wschodnie"], correct: 0 },
+      { question: "Co to jest dywersyfikacja portfela inwestycyjnego?", answers: ["Inwestowanie tylko w jedną branżę", "Kupowanie jednej akcji wielokrotnie", "Podział inwestycji na różne aktywa", "Wybieranie najtańszych akcji"], correct: 2 },
+      { question: "Który z tych instrumentów jest najbardziej ryzykowny?", answers: ["Lokata bankowa", "Obligacje skarbowe", "Akcje startupu", "Konto oszczędnościowe"], correct: 2 },
+      { question: "Czym jest dywidenda?", answers: ["Podatek od inwestycji", "Część zysku wypłacana akcjonariuszom", "Koszt zakupu akcji", "Opłata giełdowa"], correct: 1 },
+      { question: "Jaką główną funkcję pełni giełda?", answers: ["Umożliwia handel papierami wartościowymi", "Wypłaca emerytury", "Kontroluje banki", "Przechowuje dokumenty firm"], correct: 0 },
+      { question: "Czym jest inflacja?", answers: ["Wzrost wartości pieniądza", "Spadek cen", "Wzrost cen i spadek siły nabywczej pieniądza", "Zwiększenie eksportu"], correct: 2 },
+      { question: "Co to jest stopa procentowa?", answers: ["Wysokość podatku", "Procent zysku z giełdy", "Cena kredytu lub zysku z lokaty", "Wartość akcji"], correct: 2 },
+      { question: "Jakie ryzyko niesie inwestowanie w kryptowaluty?", answers: ["Bardzo niskie", "Zawsze gwarantowany zysk", "Duża zmienność i brak regulacji", "Stały zwrot"], correct: 2 },
+      { question: "ETF to:", answers: ["Rodzaj obligacji", "Fundusz inwestycyjny notowany na giełdzie", "Akcja spółki technologicznej", "Konto oszczędnościowe"], correct: 1 },
+      { question: "Która z tych instytucji reguluje rynek finansowy w Polsce?", answers: ["ZUS", "NBP", "KNF", "PKO BP"], correct: 2 },
+      { question: "Co to jest lokata bankowa?", answers: ["Inwestycja w złoto", "Pożyczka dla banku z gwarantowanym zyskiem", "Zakup akcji", "Fundusz emerytalny"], correct: 1 },
+      { question: "Który z poniższych to przykład aktywa trwałego?", answers: ["Gotówka", "Ziemia", "Akcje", "Złoto"], correct: 1 },
+      { question: "Co to jest analiza fundamentalna?", answers: ["Badanie wykresów cenowych", "Ocena kondycji finansowej firmy", "Przewidywanie kursów walut", "Ocena polityki rządu"], correct: 1 },
+      { question: "Jakie znaczenie ma czas w inwestowaniu?", answers: ["Nie ma znaczenia", "Tylko dla dużych inwestorów", "Długoterminowe inwestycje często dają większy zysk", "Czas skraca inwestycję"], correct: 2 },
+      { question: "Czym różni się akcja od obligacji?", answers: ["Obligacje to współwłasność, akcje to pożyczka", "Akcje dają udział w zyskach, obligacje to dług", "Nie ma różnicy", "Obligacje są bardziej ryzykowne"], correct: 1 }
+    ];
+
     let current = 0;
     const questionEl = document.getElementById("question");
     const answersEl = document.getElementById("answers");
@@ -145,19 +181,19 @@
     const fiftyBtn = document.getElementById("fiftyBtn");
     const phoneBtn = document.getElementById("phoneBtn");
     const audienceBtn = document.getElementById("audienceBtn");
-    const winMessage = document.getElementById("winMessage");
+    const winnerMessage = document.getElementById("winnerMessage");
 
     function showQuestion() {
       if (current >= questions.length) {
-        // Wygrana!
-        questionEl.textContent = "";
+        questionEl.textContent = "Gratulacje! Odpowiedziałeś na wszystkie pytania!";
         answersEl.innerHTML = "";
         resultEl.textContent = `Twój wynik: ${questions.length}/${questions.length}`;
-        winMessage.style.display = "block";
+        winnerMessage.style.display = "block";
+        createMoneyRain();
         restartBtn.style.display = "block";
-        triggerConfetti();
         return;
       }
+
       const q = questions[current];
       questionEl.textContent = q.question;
       answersEl.innerHTML = "";
@@ -168,16 +204,6 @@
         btn.onclick = () => checkAnswer(i);
         answersEl.appendChild(btn);
       });
-    }
-
-    function triggerConfetti() {
-      const duration = 5000;
-      const end = Date.now() + duration;
-      (function frame() {
-        confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
-        confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
-        if (Date.now() < end) requestAnimationFrame(frame);
-      })();
     }
 
     function checkAnswer(selected) {
@@ -195,11 +221,12 @@
     restartBtn.onclick = () => {
       current = 0;
       resultEl.textContent = "";
+      winnerMessage.style.display = "none";
       restartBtn.style.display = "none";
-      winMessage.style.display = "none";
       fiftyBtn.disabled = false;
       phoneBtn.disabled = false;
       audienceBtn.disabled = false;
+      document.querySelectorAll(".money").forEach(el => el.remove());
       showQuestion();
     };
 
@@ -228,6 +255,17 @@
       alert("Publiczność głosowała:\n" + result);
       audienceBtn.disabled = true;
     };
+
+    function createMoneyRain() {
+      for (let i = 0; i < 100; i++) {
+        const money = document.createElement("div");
+        money.textContent = "💸";
+        money.className = "money";
+        money.style.left = Math.random() * 100 + "vw";
+        money.style.animationDelay = Math.random() * 3 + "s";
+        document.body.appendChild(money);
+      }
+    }
 
     showQuestion();
   </script>
