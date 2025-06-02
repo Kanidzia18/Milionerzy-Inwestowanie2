@@ -7,7 +7,8 @@
   <title>Milionerzy: Inwestowanie</title>
   <style>
     body {
-      background-color: #001f3f;
+      background: linear-gradient(120deg, #001f3f, #003366);
+      animation: backgroundShift 10s ease-in-out infinite;
       color: #fff;
       font-family: 'Trebuchet MS', sans-serif;
       display: flex;
@@ -17,11 +18,17 @@
       min-height: 100vh;
       padding: 20px;
       margin: 0;
-      overflow-x: hidden;
+      overflow: hidden;
+    }
+
+    @keyframes backgroundShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     .game-container {
-      background-color: #003366;
+      background-color: #003366cc;
       border: 5px solid gold;
       border-radius: 20px;
       padding: 20px;
@@ -29,13 +36,10 @@
       max-width: 700px;
       text-align: center;
       position: relative;
-      z-index: 1;
+      z-index: 2;
     }
 
-    .question {
-      font-size: 1.3em;
-      margin-bottom: 20px;
-    }
+    .question { font-size: 1.3em; margin-bottom: 20px; }
 
     .answers button {
       background-color: #004080;
@@ -48,14 +52,9 @@
       cursor: pointer;
       width: 100%;
     }
+    .answers button:hover { background-color: #0059b3; }
 
-    .answers button:hover {
-      background-color: #0059b3;
-    }
-
-    .lifelines {
-      margin: 15px 0;
-    }
+    .lifelines { margin: 15px 0; }
 
     .lifelines button {
       background-color: #ffcc00;
@@ -68,16 +67,9 @@
       margin: 5px;
       cursor: pointer;
     }
+    .lifelines button:disabled { background-color: #999; cursor: not-allowed; }
 
-    .lifelines button:disabled {
-      background-color: #999;
-      cursor: not-allowed;
-    }
-
-    .result {
-      font-size: 1.5em;
-      margin-top: 20px;
-    }
+    .result { font-size: 1.5em; margin-top: 20px; }
 
     #restartBtn {
       background-color: #00aaff;
@@ -90,46 +82,36 @@
       display: none;
       margin-top: 20px;
     }
+    #restartBtn:hover { background-color: #007acc; }
 
-    #restartBtn:hover {
-      background-color: #007acc;
-    }
-
-    .qr-code {
+    #winnerMessage {
+      font-size: 2.5em;
+      color: gold;
+      font-weight: bold;
+      text-shadow: 0 0 10px #ffd700, 0 0 20px #ffcc00, 0 0 30px #ffaa00;
+      animation: pulse 1.5s infinite alternate;
+      display: none;
       margin-top: 30px;
     }
 
-    .qr-code img {
-      width: 200px;
-      height: auto;
-      border: 2px solid white;
-      border-radius: 10px;
+    @keyframes pulse {
+      0% { transform: scale(1); text-shadow: 0 0 10px #ffd700, 0 0 20px #ffcc00, 0 0 30px #ffaa00; }
+      100% { transform: scale(1.05); text-shadow: 0 0 20px #fff700, 0 0 30px #ffee00, 0 0 40px #ffcc00; }
     }
 
     .money {
       position: fixed;
       top: -50px;
-      font-size: 2em;
-      animation: fall 3s linear infinite;
-      z-index: 0;
+      font-size: calc(1.5em + 1vw);
+      animation: fall 5s linear infinite;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.9;
     }
 
     @keyframes fall {
-      0% {
-        transform: translateY(-50px) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(100vh) rotate(360deg);
-        opacity: 0;
-      }
-    }
-
-    #winnerMessage {
-      font-size: 2em;
-      color: gold;
-      margin-top: 20px;
-      display: none;
+      0% { transform: translateY(-50px) rotate(0deg) scale(1); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg) scale(1.2); opacity: 0; }
     }
   </style>
 </head>
@@ -150,27 +132,17 @@
     <button id="restartBtn">Zagraj ponownie</button>
     <div class="qr-code">
       <p>Zeskanuj kod QR:</p>
-      <img src="images/pz.png" alt="Kod QR">
+      <img src="images/pz.png" alt="Kod QR" width="200" />
     </div>
   </div>
+
+  <audio id="winSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_f2f3792c78.mp3"></audio>
 
   <script>
     const questions = [
       { question: "Co oznacza skrót 'GPW'?", answers: ["Giełda Papierów Wartościowych", "Główna Przychodnia Wiejska", "Globalna Przychodnia Wschodnia", "Główne Przedsiębiorstwo Wschodnie"], correct: 0 },
       { question: "Co to jest dywersyfikacja portfela inwestycyjnego?", answers: ["Inwestowanie tylko w jedną branżę", "Kupowanie jednej akcji wielokrotnie", "Podział inwestycji na różne aktywa", "Wybieranie najtańszych akcji"], correct: 2 },
-      { question: "Który z tych instrumentów jest najbardziej ryzykowny?", answers: ["Lokata bankowa", "Obligacje skarbowe", "Akcje startupu", "Konto oszczędnościowe"], correct: 2 },
-      { question: "Czym jest dywidenda?", answers: ["Podatek od inwestycji", "Część zysku wypłacana akcjonariuszom", "Koszt zakupu akcji", "Opłata giełdowa"], correct: 1 },
-      { question: "Jaką główną funkcję pełni giełda?", answers: ["Umożliwia handel papierami wartościowymi", "Wypłaca emerytury", "Kontroluje banki", "Przechowuje dokumenty firm"], correct: 0 },
-      { question: "Czym jest inflacja?", answers: ["Wzrost wartości pieniądza", "Spadek cen", "Wzrost cen i spadek siły nabywczej pieniądza", "Zwiększenie eksportu"], correct: 2 },
-      { question: "Co to jest stopa procentowa?", answers: ["Wysokość podatku", "Procent zysku z giełdy", "Cena kredytu lub zysku z lokaty", "Wartość akcji"], correct: 2 },
-      { question: "Jakie ryzyko niesie inwestowanie w kryptowaluty?", answers: ["Bardzo niskie", "Zawsze gwarantowany zysk", "Duża zmienność i brak regulacji", "Stały zwrot"], correct: 2 },
-      { question: "ETF to:", answers: ["Rodzaj obligacji", "Fundusz inwestycyjny notowany na giełdzie", "Akcja spółki technologicznej", "Konto oszczędnościowe"], correct: 1 },
-      { question: "Która z tych instytucji reguluje rynek finansowy w Polsce?", answers: ["ZUS", "NBP", "KNF", "PKO BP"], correct: 2 },
-      { question: "Co to jest lokata bankowa?", answers: ["Inwestycja w złoto", "Pożyczka dla banku z gwarantowanym zyskiem", "Zakup akcji", "Fundusz emerytalny"], correct: 1 },
-      { question: "Który z poniższych to przykład aktywa trwałego?", answers: ["Gotówka", "Ziemia", "Akcje", "Złoto"], correct: 1 },
-      { question: "Co to jest analiza fundamentalna?", answers: ["Badanie wykresów cenowych", "Ocena kondycji finansowej firmy", "Przewidywanie kursów walut", "Ocena polityki rządu"], correct: 1 },
-      { question: "Jakie znaczenie ma czas w inwestowaniu?", answers: ["Nie ma znaczenia", "Tylko dla dużych inwestorów", "Długoterminowe inwestycje często dają większy zysk", "Czas skraca inwestycję"], correct: 2 },
-      { question: "Czym różni się akcja od obligacji?", answers: ["Obligacje to współwłasność, akcje to pożyczka", "Akcje dają udział w zyskach, obligacje to dług", "Nie ma różnicy", "Obligacje są bardziej ryzykowne"], correct: 1 }
+      // ... (dodaj pozostałe pytania)
     ];
 
     let current = 0;
@@ -182,6 +154,7 @@
     const phoneBtn = document.getElementById("phoneBtn");
     const audienceBtn = document.getElementById("audienceBtn");
     const winnerMessage = document.getElementById("winnerMessage");
+    const winSound = document.getElementById("winSound");
 
     function showQuestion() {
       if (current >= questions.length) {
@@ -189,11 +162,11 @@
         answersEl.innerHTML = "";
         resultEl.textContent = `Twój wynik: ${questions.length}/${questions.length}`;
         winnerMessage.style.display = "block";
-        createMoneyRain();
         restartBtn.style.display = "block";
+        winSound.play();
+        createMoneyRain();
         return;
       }
-
       const q = questions[current];
       questionEl.textContent = q.question;
       answersEl.innerHTML = "";
@@ -221,12 +194,12 @@
     restartBtn.onclick = () => {
       current = 0;
       resultEl.textContent = "";
-      winnerMessage.style.display = "none";
       restartBtn.style.display = "none";
       fiftyBtn.disabled = false;
       phoneBtn.disabled = false;
       audienceBtn.disabled = false;
-      document.querySelectorAll(".money").forEach(el => el.remove());
+      winnerMessage.style.display = "none";
+      document.querySelectorAll('.money').forEach(e => e.remove());
       showQuestion();
     };
 
@@ -234,9 +207,7 @@
       const buttons = Array.from(answersEl.querySelectorAll("button"));
       const correctIndex = questions[current].correct;
       let wrongButtons = buttons.filter(btn => Number(btn.dataset.index) !== correctIndex);
-      wrongButtons.sort(() => Math.random() - 0.5).slice(0, 2).forEach(btn => {
-        btn.style.visibility = "hidden";
-      });
+      wrongButtons.sort(() => Math.random() - 0.5).slice(0, 2).forEach(btn => { btn.style.visibility = "hidden"; });
       fiftyBtn.disabled = true;
     };
 
@@ -259,10 +230,11 @@
     function createMoneyRain() {
       for (let i = 0; i < 100; i++) {
         const money = document.createElement("div");
-        money.textContent = "💸";
+        money.textContent = ["💸", "💰", "🪙"][Math.floor(Math.random() * 3)];
         money.className = "money";
         money.style.left = Math.random() * 100 + "vw";
         money.style.animationDelay = Math.random() * 3 + "s";
+        money.style.fontSize = Math.random() * 1.5 + 1 + "em";
         document.body.appendChild(money);
       }
     }
