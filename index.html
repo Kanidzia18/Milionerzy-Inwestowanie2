@@ -1,5 +1,6 @@
 
 
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -152,192 +153,155 @@
 
   <div class="end-screen" id="endScreen">
     <div class="end-message" id="endMessage"></div>
-    <input type="text" id="playerName" placeholder="Wpisz swoje imię" style="padding:10px; font-size:1em; margin-bottom:15px; border-radius:8px;" />
     <button id="restartBtn">Zagraj ponownie</button>
-    <div id="ranking" style="margin-top:20px; text-align:left;">
-      <h3>🏆 Ranking lokalny:</h3>
-      <ul id="rankingList" style="list-style:none; padding:0;"></ul>
-    </div>
   </div>
 
   <audio id="winSound" src="win.mp3" preload="auto"></audio>
 
   <script>
-    const questions = [
-      { question: "Co oznacza skrót 'GPW'?", answers: ["Giełda Papierów Wartościowych", "Główna Przychodnia Wiejska", "Globalna Przychodnia Wschodnia", "Główne Przedsiębiorstwo Wschodnie"], correct: 0 },
-      { question: "Co to jest dywersyfikacja portfela inwestycyjnego?", answers: ["Inwestowanie tylko w jedną branżę", "Kupowanie jednej akcji wielokrotnie", "Podział inwestycji na różne aktywa", "Wybieranie najtańszych akcji"], correct: 2 },
-      { question: "Który z tych instrumentów jest najbardziej ryzykowny?", answers: ["Lokata bankowa", "Obligacje skarbowe", "Akcje startupu", "Konto oszczędnościowe"], correct: 2 },
-      { question: "Czym jest dywidenda?", answers: ["Podatek od inwestycji", "Część zysku wypłacana akcjonariuszom", "Koszt zakupu akcji", "Opłata giełdowa"], correct: 1 },
-      { question: "Jaką główną funkcję pełni giełda?", answers: ["Umożliwia handel papierami wartościowymi", "Wypłaca emerytury", "Kontroluje banki", "Przechowuje dokumenty firm"], correct: 0 }
-    ];
+  const questions = [
+    { question: "Co oznacza skrót 'GPW'?", answers: ["Giełda Papierów Wartościowych", "Główna Przychodnia Wiejska", "Globalna Przychodnia Wschodnia", "Główne Przedsiębiorstwo Wschodnie"], correct: 0 },
+    { question: "Co to jest dywersyfikacja portfela inwestycyjnego?", answers: ["Inwestowanie tylko w jedną branżę", "Kupowanie jednej akcji wielokrotnie", "Podział inwestycji na różne aktywa", "Wybieranie najtańszych akcji"], correct: 2 },
+    { question: "Który z tych instrumentów jest najbardziej ryzykowny?", answers: ["Lokata bankowa", "Obligacje skarbowe", "Akcje startupu", "Konto oszczędnościowe"], correct: 2 },
+    { question: "Czym jest dywidenda?", answers: ["Podatek od inwestycji", "Część zysku wypłacana akcjonariuszom", "Koszt zakupu akcji", "Opłata giełdowa"], correct: 1 },
+    { question: "Jaką główną funkcję pełni giełda?", answers: ["Umożliwia handel papierami wartościowymi", "Wypłaca emerytury", "Kontroluje banki", "Przechowuje dokumenty firm"], correct: 0 }
+  ];
 
-    let current = 0;
-    let score = 0;
-    let startTime;
-    let timer;
-    const maxTime = 20;
+  let current = 0;
+  let score = 0;
+  let startTime;
+  let timer;
+  const maxTime = 20;
 
-    const questionEl = document.getElementById("question");
-    const answersEl = document.getElementById("answers");
-    const gameContainer = document.getElementById("gameContainer");
-    const endScreen = document.getElementById("endScreen");
-    const endMessage = document.getElementById("endMessage");
-    const restartBtn = document.getElementById("restartBtn");
-    const qrWrapper = document.getElementById("qrWrapper");
-    const winSound = document.getElementById("winSound");
+  const questionEl = document.getElementById("question");
+  const answersEl = document.getElementById("answers");
+  const gameContainer = document.getElementById("gameContainer");
+  const endScreen = document.getElementById("endScreen");
+  const endMessage = document.getElementById("endMessage");
+  const restartBtn = document.getElementById("restartBtn");
+  const qrWrapper = document.getElementById("qrWrapper");
+  const winSound = document.getElementById("winSound");
 
-    const fiftyBtn = document.getElementById("fiftyBtn");
-    const phoneBtn = document.getElementById("phoneBtn");
-    const audienceBtn = document.getElementById("audienceBtn");
-    const nameInput = document.getElementById("playerName");
-    const rankingList = document.getElementById("rankingList");
+  const fiftyBtn = document.getElementById("fiftyBtn");
+  const phoneBtn = document.getElementById("phoneBtn");
+  const audienceBtn = document.getElementById("audienceBtn");
 
-    const timerEl = document.createElement("div");
-    const scoreEl = document.createElement("div");
-    Object.assign(timerEl.style, { fontSize: "1.2em", marginBottom: "10px" });
-    Object.assign(scoreEl.style, { fontSize: "1.2em", marginBottom: "10px" });
-    gameContainer.insertBefore(timerEl, questionEl);
-    gameContainer.insertBefore(scoreEl, questionEl);
+  // Dodaj element do wyświetlania czasu i punktów
+  const timerEl = document.createElement("div");
+  const scoreEl = document.createElement("div");
+  Object.assign(timerEl.style, { fontSize: "1.2em", marginBottom: "10px" });
+  Object.assign(scoreEl.style, { fontSize: "1.2em", marginBottom: "10px" });
+  gameContainer.insertBefore(timerEl, questionEl);
+  gameContainer.insertBefore(scoreEl, questionEl);
 
-    function startTimer() {
-      let timeLeft = maxTime;
+  function startTimer() {
+    let timeLeft = maxTime;
+    timerEl.textContent = `⏱️ Czas: ${timeLeft}s`;
+    startTime = Date.now();
+    timer = setInterval(() => {
+      timeLeft = maxTime - Math.floor((Date.now() - startTime) / 1000);
       timerEl.textContent = `⏱️ Czas: ${timeLeft}s`;
-      startTime = Date.now();
-      timer = setInterval(() => {
-        timeLeft = maxTime - Math.floor((Date.now() - startTime) / 1000);
-        timerEl.textContent = `⏱️ Czas: ${timeLeft}s`;
-        if (timeLeft <= 0) {
-          clearInterval(timer);
-          showEndScreen(false, true);
-        }
-      }, 500);
-    }
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        showEndScreen(false, true); // przegrana przez czas
+      }
+    }, 500);
+  }
 
-    function showQuestion() {
-      const q = questions[current];
-      questionEl.textContent = q.question;
-      answersEl.innerHTML = "";
-      q.answers.forEach((answer, i) => {
-        const btn = document.createElement("button");
-        btn.textContent = answer;
-        btn.onclick = () => checkAnswer(i);
-        answersEl.appendChild(btn);
-      });
-      startTimer();
-      scoreEl.textContent = `⭐ Punkty: ${score}`;
-    }
+  function showQuestion() {
+    const q = questions[current];
+    questionEl.textContent = q.question;
+    answersEl.innerHTML = "";
+    q.answers.forEach((answer, i) => {
+      const btn = document.createElement("button");
+      btn.textContent = answer;
+      btn.onclick = () => checkAnswer(i);
+      answersEl.appendChild(btn);
+    });
+    startTimer();
+    scoreEl.textContent = `⭐ Punkty: ${score}`;
+  }
 
-    function checkAnswer(selected) {
-      clearInterval(timer);
-      const timeTaken = (Date.now() - startTime) / 1000;
-      if (selected === questions[current].correct) {
-        const earned = Math.max(0, Math.round(maxTime - timeTaken));
-        score += earned;
-        current++;
-        if (current >= questions.length) {
-          showEndScreen(true);
-        } else {
-          showQuestion();
-        }
+  function checkAnswer(selected) {
+    clearInterval(timer);
+    const timeTaken = (Date.now() - startTime) / 1000;
+    if (selected === questions[current].correct) {
+      const earned = Math.max(0, Math.round(maxTime - timeTaken));
+      score += earned;
+      current++;
+      if (current >= questions.length) {
+        showEndScreen(true);
       } else {
-        showEndScreen(false);
+        showQuestion();
       }
+    } else {
+      showEndScreen(false);
     }
+  }
 
-    function showEndScreen(won, timeout = false) {
-      clearInterval(timer);
-      gameContainer.style.display = "none";
-      qrWrapper.style.display = "none";
-      endScreen.style.display = "flex";
-      nameInput.style.display = "block";
-      nameInput.focus();
-
-      if (timeout) {
-        endMessage.textContent = "⏳ Czas się skończył! Przegrałeś!";
-      } else {
-        endMessage.textContent = won ? `🎉 Brawo! Zostałeś milionerem!\nTwój wynik: ${score} pkt` : `❌ Niestety, przegrałeś!\nTwój wynik: ${score} pkt`;
-      }
-
-      if (won) {
-        winSound.play();
-        spawnMoneyRain();
-      }
+  function showEndScreen(won, timeout = false) {
+    clearInterval(timer);
+    gameContainer.style.display = "none";
+    qrWrapper.style.display = "none";
+    endScreen.style.display = "flex";
+    if (timeout) {
+      endMessage.textContent = "⏳ Czas się skończył! Przegrałeś!";
+    } else {
+      endMessage.textContent = won ? `🎉 Brawo! Zostałeś milionerem!\nTwój wynik: ${score} pkt` : `❌ Niestety, przegrałeś!\nTwój wynik: ${score} pkt`;
     }
-
-    function spawnMoneyRain() {
-      for (let i = 0; i < 80; i++) {
-        const money = document.createElement("div");
-        money.classList.add("money");
-        money.textContent = "💸";
-        money.style.left = `${Math.random() * 100}%`;
-        money.style.animationDuration = `${Math.random() * 3 + 3}s`;
-        document.body.appendChild(money);
-        setTimeout(() => money.remove(), 7000);
-      }
+    if (won) {
+      winSound.play();
+      spawnMoneyRain();
     }
+  }
 
-    function saveToRanking(name, score) {
-      const entry = { name, score };
-      let ranking = JSON.parse(localStorage.getItem("ranking") || "[]");
-      ranking.push(entry);
-      ranking.sort((a, b) => b.score - a.score);
-      ranking = ranking.slice(0, 10);
-      localStorage.setItem("ranking", JSON.stringify(ranking));
+  function spawnMoneyRain() {
+    for (let i = 0; i < 80; i++) {
+      const money = document.createElement("div");
+      money.classList.add("money");
+      money.textContent = "💸";
+      money.style.left = `${Math.random() * 100}%`;
+      money.style.animationDuration = `${Math.random() * 3 + 3}s`;
+      document.body.appendChild(money);
+      setTimeout(() => money.remove(), 7000);
     }
+  }
 
-    function showRanking() {
-      rankingList.innerHTML = "";
-      const ranking = JSON.parse(localStorage.getItem("ranking") || "[]");
-      ranking.forEach((entry, index) => {
-        const li = document.createElement("li");
-        li.textContent = `${index + 1}. ${entry.name} – ${entry.score} pkt`;
-        rankingList.appendChild(li);
-      });
-    }
-
-    restartBtn.onclick = () => {
-      const name = nameInput.value.trim() || "Anonim";
-      saveToRanking(name, score);
-      showRanking();
-
-      current = 0;
-      score = 0;
-      endScreen.style.display = "none";
-      gameContainer.style.display = "flex";
-      qrWrapper.style.display = "block";
-      nameInput.value = "";
-      fiftyBtn.disabled = false;
-      phoneBtn.disabled = false;
-      audienceBtn.disabled = false;
-      document.querySelectorAll(".money").forEach(m => m.remove());
-      showQuestion();
-    };
-
-    fiftyBtn.onclick = () => {
-      const buttons = Array.from(answersEl.querySelectorAll("button"));
-      const correctIndex = questions[current].correct;
-      let wrongButtons = buttons.filter((btn, idx) => idx !== correctIndex);
-      wrongButtons.sort(() => Math.random() - 0.5).slice(0, 2).forEach(btn => btn.style.visibility = "hidden");
-      fiftyBtn.disabled = true;
-    };
-
-    phoneBtn.onclick = () => {
-      alert("Telefon: Myślę, że to " + questions[current].answers[questions[current].correct]);
-      phoneBtn.disabled = true;
-    };
-
-    audienceBtn.onclick = () => {
-      const correct = questions[current].correct;
-      let dist = [10, 20, 30, 40];
-      dist[correct] += 30;
-      dist = dist.map(v => v + Math.floor(Math.random() * 10));
-      let result = questions[current].answers.map((a, i) => `${a}: ${dist[i]}%`).join("\n");
-      alert("Publiczność głosowała:\n" + result);
-      audienceBtn.disabled = true;
-    };
-
+  restartBtn.onclick = () => {
+    current = 0;
+    score = 0;
+    endScreen.style.display = "none";
+    gameContainer.style.display = "flex";
+    qrWrapper.style.display = "block";
+    fiftyBtn.disabled = false;
+    phoneBtn.disabled = false;
+    audienceBtn.disabled = false;
+    document.querySelectorAll(".money").forEach(m => m.remove());
     showQuestion();
-    showRanking();
-  </script>
-</body>
-</html>
+  };
+
+  fiftyBtn.onclick = () => {
+    const buttons = Array.from(answersEl.querySelectorAll("button"));
+    const correctIndex = questions[current].correct;
+    let wrongButtons = buttons.filter((btn, idx) => idx !== correctIndex);
+    wrongButtons.sort(() => Math.random() - 0.5).slice(0, 2).forEach(btn => btn.style.visibility = "hidden");
+    fiftyBtn.disabled = true;
+  };
+
+  phoneBtn.onclick = () => {
+    alert("Telefon: Myślę, że to " + questions[current].answers[questions[current].correct]);
+    phoneBtn.disabled = true;
+  };
+
+  audienceBtn.onclick = () => {
+    const correct = questions[current].correct;
+    let dist = [10, 20, 30, 40];
+    dist[correct] += 30;
+    dist = dist.map(v => v + Math.floor(Math.random() * 10));
+    let result = questions[current].answers.map((a, i) => `${a}: ${dist[i]}%`).join("\n");
+    alert("Publiczność głosowała:\n" + result);
+    audienceBtn.disabled = true;
+  };
+
+  showQuestion();
+</script>
