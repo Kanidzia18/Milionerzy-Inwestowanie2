@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -65,7 +66,7 @@
 
     .lifelines button:disabled { background-color: #999; cursor: not-allowed; }
 
-    #winScreen {
+    #endScreen {
       display: none;
       position: fixed;
       top: 0; left: 0;
@@ -77,7 +78,7 @@
       align-items: center;
     }
 
-    #winMessage {
+    #endMessage {
       font-size: 3em;
       color: gold;
       text-shadow: 2px 2px 10px #000;
@@ -120,20 +121,24 @@
       100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
     }
 
-    .qr-code {
-      margin-top: 20px;
-    }
-
     #qrWrapper {
       text-align: center;
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 100;
+    }
+
+    #qrWrapper img {
+      width: 100px;
+      border: 3px solid white;
+      border-radius: 8px;
     }
   </style>
 </head>
 <body>
   <div id="qrWrapper">
-    <div class="qr-code">
-      <img src="https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=https://twoja-strona.pl" alt="QR Code">
-    </div>
+    <img src="https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=https://twoja-strona.pl" alt="QR Code">
   </div>
 
   <div class="game-container" id="gameContainer">
@@ -149,8 +154,8 @@
     </div>
   </div>
 
-  <div id="winScreen">
-    <div id="winMessage">Brawo! Zostałeś milionerem!</div>
+  <div id="endScreen">
+    <div id="endMessage"></div>
     <button id="restartBtn">Zagraj ponownie</button>
   </div>
 
@@ -160,14 +165,14 @@
     const questions = [
       { question: "Co oznacza skrót 'GPW'?", answers: ["Giełda Papierów Wartościowych", "Główna Przychodnia Wiejska", "Globalna Przychodnia Wschodnia", "Główne Przedsiębiorstwo Wschodnie"], correct: 0 },
       { question: "Co to jest dywersyfikacja portfela inwestycyjnego?", answers: ["Inwestowanie tylko w jedną branżę", "Kupowanie jednej akcji wielokrotnie", "Podział inwestycji na różne aktywa", "Wybieranie najtańszych akcji"], correct: 2 },
-      { question: "Który z tych instrumentów jest najbardziej ryzykowny?", answers: ["Lokata bankowa", "Obligacje skarbowe", "Akcje startupu", "Konto oszczędnościowe"], correct: 2 },
-      // Dodaj więcej pytań...
+      { question: "Który z tych instrumentów jest najbardziej ryzykowny?", answers: ["Lokata bankowa", "Obligacje skarbowe", "Akcje startupu", "Konto oszczędnościowe"], correct: 2 }
     ];
 
     let current = 0;
     const questionEl = document.getElementById("question");
     const answersEl = document.getElementById("answers");
-    const winScreen = document.getElementById("winScreen");
+    const endScreen = document.getElementById("endScreen");
+    const endMessage = document.getElementById("endMessage");
     const restartBtn = document.getElementById("restartBtn");
     const fiftyBtn = document.getElementById("fiftyBtn");
     const phoneBtn = document.getElementById("phoneBtn");
@@ -178,7 +183,7 @@
 
     function showQuestion() {
       if (current >= questions.length) {
-        showWinScreen();
+        showEndScreen(true);
         return;
       }
       const q = questions[current];
@@ -198,17 +203,19 @@
         current++;
         showQuestion();
       } else {
-        questionEl.textContent = "Błędna odpowiedź! Gra zakończona.";
-        answersEl.innerHTML = "";
+        showEndScreen(false);
       }
     }
 
-    function showWinScreen() {
+    function showEndScreen(won) {
       gameContainer.style.display = "none";
       qrWrapper.style.display = "none";
-      winScreen.style.display = "flex";
-      winSound.play();
-      spawnMoneyRain();
+      endScreen.style.display = "flex";
+      endMessage.textContent = won ? "Brawo! Zostałeś milionerem!" : "Niestety, przegrałeś!";
+      if (won) {
+        winSound.play();
+        spawnMoneyRain();
+      }
     }
 
     function spawnMoneyRain() {
@@ -224,7 +231,7 @@
 
     restartBtn.onclick = () => {
       current = 0;
-      winScreen.style.display = "none";
+      endScreen.style.display = "none";
       gameContainer.style.display = "block";
       qrWrapper.style.display = "block";
       fiftyBtn.disabled = false;
